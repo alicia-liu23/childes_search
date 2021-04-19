@@ -1,0 +1,32 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Welcome to CHILDES Database Search!</a>
+</nav>
+<div class="jumbotron">
+    <h1 class="display-4">Search Results</h1>
+    <hr class="my-4">
+    <p class="lead">
+        <form action="{% url 'index' %}" method="get" class="form-inline">
+            <button type="submit" name="button" class="btn btn-primary">Search Again</button>
+        </form>
+    </p>
+</div>
+
+<div class="col d-flex justify-content-center">
+{% if transcripts %}
+    <div class="card" style="width: 90rem;">
+        <ul class="list-group list-group-flush">
+            {% for transcript in transcripts %}
+                <li class="list-group-item">
+                    <h5 class="card-title">{{transcript.corpus}} Corpus</h5>
+                    <a href="{% url 'detail' transcript.id %}">{{ transcript.name }}.cha</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% else %}
+    <p>No transcripts found.</p>
+{% endif %}
+</div>

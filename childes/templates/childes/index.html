@@ -1,0 +1,118 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Welcome to CHILDES Database Search!</a>
+</nav>
+<div class="jumbotron">
+    <h1 class="display-4">Start your search here</h1>
+    <hr class="my-4">
+    <p class="lead">
+        <!-- <form>
+            <div class="form-group col-xs-4 col-md-4">
+                <label for="name" class="control-label">Line Height</label>
+                <input type="email" value='' class="form-control" id="name" placeholder="Ime">
+            </div>
+            <div class="form-group col-xs-4 col-md-4">
+                <label for="name" class="control-label">Padding Top</label>
+                <input type="email" value='' class="form-control" id="name" placeholder="Ime">
+            </div>
+            <div class="form-group col-xs-4 col-md-4">
+                <label for="name" class="control-label">Padding Bottom</label>
+                <input type="email" value='' class="form-control" id="name" placeholder="Ime">
+            </div>
+        </form> -->
+        <form action="{% url 'index' %}" method="get" class="form-inline">
+            <div class="form-group">
+                <div for="query_name" style="margin-left:10;margin-right:5">Transcript Name:</div>
+                <input type="text" class="form-control" name="query_name" placeholder="name" value={% if query_name %}{{query_name}}{% endif %}>
+            </div>
+            <div class="form-group">
+                <div for="query_corpus" style="margin-left:10;margin-right:5" >Corpus:</div>
+                <input type="text" class="form-control" name="query_corpus" placeholder="corpus" value={% if query_corpus %}{{query_corpus}}{% endif %}>
+            </div>
+            <div for="query_gender" style="margin-left:10;margin-right:5">Child Gender:</div>
+            <select class="form-control" name="query_gender">
+                <option value="any">any</option>
+                <option value="male" {% if query_gender == "male" %}selected{% endif %}>male</option>
+                <option value="female" {% if query_gender == "female" %}selected{% endif %}>female</option>
+            </select>
+            <div for="query_ses" style="margin-left:10;margin-right:5" >Family SES:</div>
+            <select class="form-control" name="query_ses">
+                <option value="any">any</option>
+                <option value="PRO" {% if query_ses == "PRO" %}selected{% endif %}>Professional Class</option>
+                <option value="MID" {% if query_ses == "MID" %}selected{% endif %}>Middle Class</option>
+                <option value="WORK" {% if query_ses == "WORK" %}selected{% endif %}>Working Class</option>
+                <option value="WEL" {% if query_ses == "WEL" %}selected{% endif %}>Welfare Class</option>
+            </select>
+            <button type="submit" name="button" class="btn btn-primary" value="Submit" style="margin: 10" >Submit</button>
+        </form>
+    </p>
+</div>
+
+
+<!-- {% if transcript_list %}
+    <ul>
+    {% for transcript in transcript_list %}
+        <li><a href="{% url 'detail' transcript.id %}">{{ transcript.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No transcripts available.</p>
+{% endif %} -->
+
+{% load my_tags %} 
+
+<div class="col d-flex justify-content-center" style="margin-bottom:20">
+{% if page_obj %}
+    <div class="card" style="width: 90rem;">
+        <ul class="list-group list-group-flush">
+            {% for transcript in page_obj %}
+                <li class="list-group-item">
+                    <h5 class="card-title">{{transcript.corpus}} Corpus</h5>
+                    <a href="{% url 'detail' transcript.id %}">{{ transcript.name }} </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% else %}
+    <p>No transcripts available.</p>
+{% endif %}
+</div>
+
+<!-- <div class="pagination">
+    <span class="step-links" style="padding:10; margin-left:12">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo;</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}"> &raquo;</a>
+        {% endif %}
+    </span>
+</div> -->
+
+<div class="pagination">
+    <span class="step-links" style="padding:10; margin-left:12">
+        {% if page_obj.has_previous %}
+            <a href="?{% param_replace page=1 %}">&laquo;</a>
+            <a href="?{% param_replace page=page_obj.previous_page_number %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?{% param_replace page=page_obj.next_page_number %}">next</a>
+            <a href="?{% param_replace page=paginator.num_pages %}"> &raquo;</a>
+        {% endif %}
+    </span>
+</div>
